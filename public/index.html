@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+    <title>Javangular</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+</head>
+<body>
+<div data-ng-app="Javangular" data-ng-controller="ctrl">
+    <div class="die">
+        {{ number }}
+    </div>
+    <div class="roll-good" data-ng-show="isMax">You rolled a {{DIE_MAX}}! Nice!</div>
+    <div class="roll-bad" data-ng-show="isMin">You rolled a {{DIE_MIN}}! Oh no!</div>
+    <button data-ng-click="roll()">Roll the die!</button>
+</div>
+<script>
+    const app = angular.module("Javangular", [])
+
+    app.controller("ctrl", ($scope) => {
+        $scope.DIE_MAX = 20;
+        $scope.DIE_MIN = 1;
+        $scope.roll = () => {
+            let res = Math.floor(Math.random() * ($scope.DIE_MAX - $scope.DIE_MIN + 1)) + $scope.DIE_MIN;
+            $scope.isMax = (res === $scope.DIE_MAX);
+            $scope.isMin = (res === $scope.DIE_MIN);
+            $scope.number = res;
+        }
+    })
+</script>
+</body>
+</html>

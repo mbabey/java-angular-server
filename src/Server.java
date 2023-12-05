@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,10 +41,9 @@ public class Server
             throw new IllegalArgumentException("Must include Server IP address as the first argument.");
         }
 
-        Map<String, HttpHandler> routingMap = setupRoutingMap();
-
         try
         {
+            Map<String, HttpHandler> routingMap = setupRoutingMap();
             HttpServer http = HttpServer.create(new InetSocketAddress(InetAddress.getByName(args[0]), 8080), 0);
             routingMap.forEach(http::createContext);
             http.setExecutor(null);
@@ -58,11 +59,12 @@ public class Server
      *
      * @return the routing map for the HTTP Server.
      */
-    private Map<String, HttpHandler> setupRoutingMap()
+    private Map<String, HttpHandler> setupRoutingMap() throws IOException
     {
         Map<String, HttpHandler> routingMap = new HashMap<>();
 
-        routingMap.put("/", new BasicHandler(200, "Root".getBytes()));
+        byte[] rootBytes = Files.readAllBytes(Paths.get("../public/index.html"));
+        routingMap.put("/", new BasicHandler(200, rootBytes));
         routingMap.put("/foo", new BasicHandler(200, "Foo".getBytes()));
         routingMap.put("/foo/bar", new BasicHandler(200, "FooBar".getBytes()));
 
@@ -87,7 +89,7 @@ public class Server
         /**
          * Create a BasicHandler.
          *
-         * @param rCode the HTTP response code
+         * @param rCode   the HTTP response code
          * @param resBody the HTTP response body
          */
         public BasicHandler(int rCode, byte[] resBody)
@@ -100,7 +102,7 @@ public class Server
          * Handle the HTTP response.
          *
          * @param ex the exchange containing the request from the
-         *                 client and used to send the response
+         *           client and used to send the response
          */
         @Override
         public void handle(HttpExchange ex)
