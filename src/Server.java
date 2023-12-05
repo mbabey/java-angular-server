@@ -48,6 +48,7 @@ public class Server
             routingMap.forEach(http::createContext);
             http.setExecutor(null);
             http.start();
+            System.out.printf("Server running on http://%s:8080", args[0]);
         } catch (IOException e)
         {
             System.out.println(e);
@@ -65,8 +66,6 @@ public class Server
 
         byte[] rootBytes = Files.readAllBytes(Paths.get("../public/index.html"));
         routingMap.put("/", new BasicHandler(200, rootBytes));
-        routingMap.put("/foo", new BasicHandler(200, "Foo".getBytes()));
-        routingMap.put("/foo/bar", new BasicHandler(200, "FooBar".getBytes()));
 
         return routingMap;
     }
