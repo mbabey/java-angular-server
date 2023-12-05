@@ -3,15 +3,72 @@
 <head>
     <title>Javangular</title>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <style>
+        :root {
+            --global-font-size: 1.4em;
+            font-size: var(--global-font-size);
+        }
 
+        .app {
+            display: flex;
+            flex-direction: column;
+            justify-items: center;
+            align-items: center;
+        }
+
+        .die {
+            position: relative;
+            width: calc(var(--global-font-size) * 2);
+            height: calc(var(--global-font-size) * 2);
+            border: 1px solid black;
+            border-radius: calc(var(--global-font-size) / 10);
+        }
+
+        .die-number {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .roll-good {
+            color: green;
+        }
+
+        .roll-bad {
+            color: red;
+        }
+
+        button {
+            cursor: pointer;
+            background-color: cornflowerblue;
+            color: white;
+            border: none;
+            border-radius: var(--global-font-size);
+            margin: calc(var(--global-font-size) / 2);
+            padding: calc(var(--global-font-size) / 2);
+            transition: all 0.1s linear;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+        }
+
+        button:active {
+            transform: scale(1.05);
+        }
+
+    </style>
 </head>
 <body>
-<div data-ng-app="Javangular" data-ng-controller="ctrl">
+<div class="app" data-ng-app="Javangular" data-ng-controller="ctrl">
     <div class="die">
-        {{ number }}
+        <span class="die-number">{{ number }}</span>
     </div>
-    <div class="roll-good" data-ng-show="isMax">You rolled a {{DIE_MAX}}! Nice!</div>
-    <div class="roll-bad" data-ng-show="isMin">You rolled a {{DIE_MIN}}! Oh no!</div>
+    <div class="roll-message">
+        <div class="roll-good" data-ng-show="isMax">You rolled a {{DIE_MAX}}! Nice!</div>
+        <div class="roll-bad" data-ng-show="isMin">You rolled a {{DIE_MIN}}! Oh no!</div>
+    </div>
     <button data-ng-click="roll()">Roll the die!</button>
 </div>
 <script>
